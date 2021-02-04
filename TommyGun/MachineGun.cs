@@ -6,35 +6,49 @@ namespace TommyGun
 {
     class MachineGun
     {
-        public const int MAGAZINE_SIZE = 16;
+        public int MagazineSize { get; private set; } = 16;
 
         private int bullets = 0;
-        private int bulletsLoaded = 0;
-
-        public int GetBulletsLoaded() { return bulletsLoaded; }
-        public bool IsEmpty() { return bulletsLoaded == 0; }
-        public int GetBullets() { return bullets; }
-        public void SetBullets(int numberOfBullets)
+        public int BulletsLoaded { get; private set; }
+        public bool IsEmpty() { return BulletsLoaded == 0; }
+        
+        public MachineGun(int bullets, int magazineSize, bool loaded)
         {
-            if (numberOfBullets > 0 )
-                bullets = numberOfBullets;
-              
-            Reload();
+            this.bullets = bullets;
+            MagazineSize = magazineSize;
+            if (!loaded) Reload();
         }
 
-        public void Reload()
+        public int Bullets
         {
-            if (bullets > MAGAZINE_SIZE)
-                bulletsLoaded = MAGAZINE_SIZE;
-            else
-                bulletsLoaded = bullets;
+            get { return bullets; }
+            set
+            {
+                if (value > 0)
+                    bullets = value;
+                Reload();
+                
+            }
         }
-        public bool Shoot()
+
+        /*    public void Reload()
+            {
+                if (bullets > MagazineSize)
+                    BulletsLoaded = MagazineSize;
+                else
+                    BulletsLoaded = bullets;
+            }*/
+
+        public void Reload() => BulletsLoaded = bullets > MagazineSize ? MagazineSize : bullets;
+        public bool Shoot
         {
-            if (bulletsLoaded == 0) return false;
-            bulletsLoaded--;
-            bullets--;
-            return true;
+            get
+            {
+                if (BulletsLoaded == 0) return false;
+                BulletsLoaded--;
+                bullets--;
+                return true;
+            }
         }
     }
 }
